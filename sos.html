@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOS | Mind Sanctuary</title>
+
+  <!-- Aesthetic Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- HOPEFUL MINIMAL CSS --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+    
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.45);
+      --glass-card: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.8);
+      --text-main: #334155; 
+      --text-muted: #64748b;
+      --accent-color: #ef4444; /* Red for Emergency */
+      --warn-color: #f59e0b;
+      --success-color: #10b981;
+      --warm-shadow: 0 20px 40px rgba(100, 116, 139, 0.08);
+      --radius: 24px;
+    }
+
+    /* Living Background */
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fef2f2 0%, #ffe4e6 100%); /* Soft Red Hue for Alert but calm */
+      background-size: 400% 400%;
+      animation: sunriseFlow 20s ease infinite;
+      color: var(--text-main);
+      padding: 20px;
+      display: flex; justify-content: center; align-items: flex-start;
+    }
+    @keyframes sunriseFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    /* Main Container */
+    .wrap {
+      width: 100%; max-width: 900px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--warm-shadow);
+      margin-top: 20px;
+    }
+
+    /* Header */
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .backBtn {
+      text-decoration: none; color: var(--text-muted); font-weight: 600; 
+      display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+    }
+    .backBtn:hover { color: var(--accent-color); }
+
+    .title {
+      font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+      color: #b91c1c; text-align: center; margin-bottom: 5px;
+    }
+    .subtitle { text-align: center; color: var(--text-muted); font-size: 15px; margin-bottom: 30px; }
+
+    /* Cards & Panels */
+    .panel {
+      background: rgba(255,255,255,0.6); border: 1px solid white; border-radius: 20px;
+      padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); margin-bottom: 20px;
+    }
+    .panel-header {
+      font-family: 'Playfair Display'; font-size: 18px; color: var(--text-main);
+      margin-bottom: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;
+    }
+
+    /* Action Buttons */
+    .btn {
+      padding: 12px 24px; border-radius: 50px; border: none; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: 0.2s; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-danger { background: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); width: 100%; font-size: 16px; }
+    .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4); }
+    
+    .btn-safe { background: #10b981; color: white; }
+    .btn-secondary { background: white; color: var(--text-muted); border: 1px solid #e2e8f0; font-size: 13px; }
+
+    /* Inputs */
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+    input, textarea {
+      width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0;
+      background: white; outline: none; font-size: 14px; color: var(--text-main); font-family: 'Outfit';
+    }
+    input:focus, textarea:focus { border-color: var(--accent-color); }
+
+    /* Location & Status Pills */
+    .status-pill {
+      display: inline-flex; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: #e2e8f0; color: var(--text-muted);
+    }
+    .status-pill.active { background: #dcfce7; color: #166534; }
+
+    /* Contacts Grid */
+    .contacts-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .contact-card {
+      background: white; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    
+    /* Helplines */
+    .helplines { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .helpline-chip {
+      background: #fee2e2; color: #b91c1c; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 13px;
+      text-decoration: none; border: 1px solid #fecaca;
+    }
+
+    /* Dialogs */
+    dialog {
+      border: none; border-radius: 20px; padding: 25px; width: 90%; max-width: 500px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+    dialog::backdrop { background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); }
+  </style>
+</head>
+
+<body>
+
+<main class="wrap">
+  <div class="topbar">
+    <a class="backBtn" href="dashboard.html">← Back to Dashboard</a>
+    <div class="status-pill" id="locPill">Location: Off</div>
+  </div>
+
+  <div class="title">SOS / Emergency</div>
+  <div class="subtitle">Quickly alert trusted contacts or find help.</div>
+
+  <!-- 1. MAIN ACTIONS -->
+  <div class="panel" style="background: rgba(255,255,255,0.8);">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+      <button class="btn btn-danger" onclick="doShare('sos')">🚨 SHARE ALERT</button>
+      <button class="btn btn-safe" onclick="doShare('safe')">✅ I'M SAFE</button>
+    </div>
+    
+    <div style="margin-top: 15px;">
+      <textarea id="note" rows="2" placeholder="Add custom message (optional)..."></textarea>
+    </div>
+
+    <div style="margin-top: 15px; display:flex; justify-content:space-between; align-items:center;">
+      <button class="btn btn-secondary" onclick="getLocation()" id="btnLoc">📍 Attach GPS Location</button>
+      <a id="mapsLink" href="#" target="_blank" style="display:none; font-size:13px; color:var(--accent-color); font-weight:600;">Open Map ↗</a>
+    </div>
+  </div>
+
+  <!-- 2. HELPLINES -->
+  <div class="panel">
+    <div class="panel-header">🚨 Emergency Helplines (India)</div>
+    <div class="helplines">
+      <a href="tel:112" class="helpline-chip">112 - All Emergency</a>
+      <a href="tel:100" class="helpline-chip">100 - Police</a>
+      <a href="tel:101" class="helpline-chip">101 - Fire</a>
+      <a href="tel:108" class="helpline-chip">108 - Ambulance</a>
+      <a href="tel:1091" class="helpline-chip">1091 - Women</a>
+      <a href="tel:1098" class="helpline-chip">1098 - Child</a>
+      <a href="tel:1930" class="helpline-chip">1930 - Cyber Crime</a>
+    </div>
+  </div>
+
+  <!-- 3. MEDICAL ID -->
+  <div class="panel">
+    <div class="panel-header">
+      🏥 Medical ID
+      <button class="btn btn-secondary" onclick="saveMedical()" style="padding: 4px 10px; font-size:12px;">Save</button>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+      <div><label>Name</label><input type="text" id="miName"></div>
+      <div><label>Blood Type</label><input type="text" id="miBlood"></div>
+    </div>
+    <div style="margin-bottom: 10px;"><label>Allergies</label><input type="text" id="miAllergies"></div>
+    <div style="margin-bottom: 10px;"><label>Conditions</label><input type="text" id="miConditions"></div>
+    <div style="margin-bottom: 10px;"><label>Medications</label><input type="text" id="miMeds"></div>
+  </div>
+
+  <!-- 4. TRUSTED CONTACTS -->
+  <div class="panel">
+    <div class="panel-header">
+      📞 Trusted Contacts
+      <button class="btn btn-secondary" onclick="addContact()" style="padding: 4px 10px; font-size:12px;">+ Add</button>
+    </div>
+    <div class="contacts-list" id="contactsList"></div>
+    <div style="font-size:12px; color:var(--text-muted); margin-top:10px;">
+      *Tap a contact to quick-dial or SMS. Alerts are shared via system share sheet (WhatsApp, SMS, etc).
+    </div>
+  </div>
+
+  <!-- PREVIEW BOX (Hidden by default, used for copying) -->
+  <div style="display:none;" id="previewText"></div>
+
+</main>
+
+<script>
+  // --- STORAGE KEYS ---
+  const LS = {
+    medical: "mind_sos_medical",
+    contacts: "mind_sos_contacts",
+    loc: "mind_sos_loc"
+  };
+
+  // --- INIT ---
+  document.addEventListener("DOMContentLoaded", () => {
+    loadMedical();
+    renderContacts();
+    refreshPreview();
+  });
+
+  // --- LOCATION LOGIC ---
+  function getLocation() {
+    const btn = document.getElementById("btnLoc");
+    btn.textContent = "Getting Location...";
+    
+    if(!navigator.geolocation) {
+      alert("Geolocation not supported.");
+      btn.textContent = "📍 Attach GPS";
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          acc: pos.coords.accuracy,
+          time: new Date().toLocaleString(),
+          url: `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`
+        };
+        localStorage.setItem(LS.loc, JSON.stringify(loc));
+        btn.textContent = "✅ GPS Attached";
+        refreshPreview();
+      },
+      (err) => {
+        alert("Error getting location: " + err.message);
+        btn.textContent = "📍 Retry GPS";
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  function getLocData() {
+    try { return JSON.parse(localStorage.getItem(LS.loc)); } catch { return null; }
+  }
+
+  // --- MESSAGE BUILDER ---
+  function buildMessage(mode) {
+    const note = document.getElementById("note").value;
+    const med = getMedicalData();
+    const loc = getLocData();
+    const time = new Date().toLocaleString();
+
+    let msg = mode === 'safe' ? "✅ CHECK-IN: I'm safe." : "🚨 SOS ALERT: I need help!";
+    msg += `\nTime: ${time}`;
+
+    if(note) msg += `\nMessage: ${note}`;
+    
+    if(loc) {
+      msg += `\n📍 Location: ${loc.url}`;
+      msg += `\n(Accuracy: ±${Math.round(loc.acc)}m, Updated: ${loc.time})`;
+    } else {
+      msg += `\n📍 Location: Not attached`;
+    }
+
+    if(med && (med.name || med.blood)) {
+      msg += `\n\n🏥 Medical Info:\nName: ${med.name || '-'}\nBlood: ${med.blood || '-'}\nAllergies: ${med.allergies || '-'}`;
+    }
+
+    return msg;
+  }
+
+  async function doShare(mode) {
+    const text = buildMessage(mode);
+    
+    if(navigator.share) {
+      try {
+        await navigator.share({ title: "SOS Alert", text: text });
+      } catch(err) {
+        console.log("Share canceled");
+      }
+    } else {
+      await navigator.clipboard.writeText(text);
+      alert("Message copied to clipboard! Paste it in WhatsApp/SMS.");
+    }
+  }
+
+  function refreshPreview() {
+    const loc = getLocData();
+    const pill = document.getElementById("locPill");
+    const mapLink = document.getElementById("mapsLink");
+    
+    if(loc) {
+      pill.textContent = "GPS: Active";
+      pill.classList.add("active");
+      mapLink.href = loc.url;
+      mapLink.style.display = "inline";
+    } else {
+      pill.textContent = "GPS: Off";
+      pill.classList.remove("active");
+      mapLink.style.display = "none";
+    }
+  }
+
+  // --- MEDICAL ID ---
+  function saveMedical() {
+    const data = {
+      name: document.getElementById("miName").value,
+      blood: document.getElementById("miBlood").value,
+      allergies: document.getElementById("miAllergies").value,
+      conditions: document.getElementById("miConditions").value,
+      meds: document.getElementById("miMeds").value
+    };
+    localStorage.setItem(LS.medical, JSON.stringify(data));
+    alert("Medical ID Saved.");
+  }
+
+  function loadMedical() {
+    const data = getMedicalData();
+    if(data) {
+      document.getElementById("miName").value = data.name || "";
+      document.getElementById("miBlood").value = data.blood || "";
+      document.getElementById("miAllergies").value = data.allergies || "";
+      document.getElementById("miConditions").value = data.conditions || "";
+      document.getElementById("miMeds").value = data.meds || "";
+    }
+  }
+
+  function getMedicalData() {
+    try { return JSON.parse(localStorage.getItem(LS.medical)); } catch { return null; }
+  }
+
+  // --- CONTACTS ---
+  function getContacts() {
+    try { return JSON.parse(localStorage.getItem(LS.contacts) || "[]"); } catch { return []; }
+  }
+
+  function renderContacts() {
+    const list = document.getElementById("contactsList");
+    const contacts = getContacts();
+    list.innerHTML = "";
+
+    contacts.forEach((c, i) => {
+      const div = document.createElement("div");
+      div.className = "contact-card";
+      div.innerHTML = `
+        <div>
+          <div style="font-weight:600; font-size:14px;">${c.name}</div>
+          <div style="font-size:12px; color:#64748b;">${c.phone}</div>
+        </div>
+        <div style="display:flex; gap:5px;">
+          <a href="tel:${c.phone}" class="btn btn-secondary" style="padding:6px;">📞</a>
+          <button onclick="removeContact(${i})" class="btn btn-secondary" style="padding:6px; color:#ef4444;">🗑️</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function addContact() {
+    const name = prompt("Contact Name:");
+    if(!name) return;
+    const phone = prompt("Phone Number:");
+    if(!phone) return;
+
+    const contacts = getContacts();
+    contacts.push({ name, phone });
+    localStorage.setItem(LS.contacts, JSON.stringify(contacts));
+    renderContacts();
+  }
+
+  function removeContact(idx) {
+    if(!confirm("Remove contact?")) return;
+    const contacts = getContacts();
+    contacts.splice(idx, 1);
+    localStorage.setItem(LS.contacts, JSON.stringify(contacts));
+    renderContacts();
+  }
+</script>
+
+</body>
+</html>
